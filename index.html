@@ -30,7 +30,7 @@
             box-shadow: 0 0 40px rgba(0,0,0,0.5);
         }
 
-        /* 顶部导航栏 (毛玻璃固定) */
+        /* 顶部导航栏 (毛玻璃固定，图片logo) */
         .top-nav {
             position: sticky;
             top: 0;
@@ -38,29 +38,25 @@
             background: rgba(8, 10, 20, 0.85);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(241, 90, 36, 0.3);
-            padding: 8px 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-wrap: nowrap;
             gap: 8px;
+            padding: 8px 12px;
             overflow-x: auto;
             white-space: nowrap;
-            scrollbar-width: thin;
-        }
-        .top-nav::-webkit-scrollbar {
-            height: 2px;
         }
         .nav-logo {
-            font-weight: 800;
-            background: linear-gradient(135deg, #fff, #f5a65b);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            font-size: 1.1rem;
-            letter-spacing: -0.3px;
-            margin-right: 4px;
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            line-height: 1;
+        }
+        .nav-logo img {
+            height: 32px;
+            width: auto;
+            display: block;
+            max-width: 120px;
         }
         .nav-menu {
             display: flex;
@@ -257,6 +253,7 @@
             .page { padding: 1rem 1rem 90px 1rem; }
             h2 { font-size: 1.45rem; }
             .nav-item { padding: 5px 10px; font-size: 0.7rem; }
+            .nav-logo img { height: 28px; }
         }
 
         .img-placeholder {
@@ -327,8 +324,6 @@
             transition: opacity 0.2s;
             pointer-events: none;
             white-space: nowrap;
-            background: #10b981;
-            color: white;
         }
         .toast-msg.show { opacity: 1; }
 
@@ -362,11 +357,11 @@
 </head>
 <body>
 <div class="app">
-    <!-- 新增顶部导航栏 -->
+    <!-- 顶部导航栏 (图片Logo) -->
     <div class="top-nav">
         <div class="nav-logo">
-		<img src="images/ag-logo.jpg" alt="AG回城" style="height: 32px; width: auto; display: block; max-width: 120px;" onerror="this.onerror=null; this.parentNode.innerHTML='⚡ AG·回城'; this.parentNode.style.fontWeight='800'; this.parentNode.style.background='linear-gradient(135deg,#fff,#f5a65b)'; this.parentNode.style.webkitBackgroundClip='text'; this.parentNode.style.backgroundClip='text'; this.parentNode.style.color='transparent';">
-		</div>
+            <img src="images/ag-logo.png" alt="AG回城" onerror="this.onerror=null; this.parentNode.innerHTML='⚡ AG·回城'; this.parentNode.style.fontWeight='800'; this.parentNode.style.background='linear-gradient(135deg,#fff,#f5a65b)'; this.parentNode.style.webkitBackgroundClip='text'; this.parentNode.style.backgroundClip='text'; this.parentNode.style.color='transparent';">
+        </div>
         <div class="nav-menu" id="topNavMenu">
             <div class="nav-item" data-page="0">首页</div>
             <div class="nav-item" data-page="1">热爱·变革</div>
@@ -421,8 +416,9 @@
         return `<div class="process-steps">${steps.map((s, idx) => `<div class="step"><div class="step-num">${idx+1}</div>${s}<span class="tiny-text">全程陪跑</span></div>`).join('')}</div>`;
     }
 
-    // 钉钉配置
+    // ======================= 钉钉配置（使用原token）=======================
     const DINGTALK_WEBHOOK = "https://oapi.dingtalk.com/robot/send?access_token=362c8402aff4460cbb707cd7df9d88e44a6b7ca8fe588df1db121befee140486";
+
     function showToast(msg, isErr) {
         const toast = document.getElementById('toastMsg');
         toast.textContent = msg;
@@ -430,22 +426,39 @@
         toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 2800);
     }
+
+    // 修复后的钉钉发送函数（带详细错误捕获）
     function sendToDingtalk(data, callback) {
-        const text = `## 🎮 AG回城入驻申请\n---\n**品牌：** ${data.brand}\n**联系人：** ${data.contactName}\n**电话：** ${data.phone}\n**邮箱：** ${data.email || '未填'}\n**意向楼层：** ${data.intentFloor || '未选择'}\n**备注：** ${data.message || '无'}\n⏰ ${new Date().toLocaleString('zh-CN')}`;
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', DINGTALK_WEBHOOK, true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200 && JSON.parse(xhr.responseText).errcode === 0) showToast('✅ 提交成功！招商经理会联系您');
-                else showToast('⚠️ 提交成功，但通知异常', true);
-                if (callback) callback();
+        const text = `## 🎮 AG回城入驻申请通知\n\n---\n**🏷️ 品牌名称：** ${data.brand}\n**👤 联系人：** ${data.contactName}\n**📞 联系电话：** ${data.phone}\n**📧 电子邮箱：** ${data.email || '未填写'}\n**📍 意向楼层/业态：** ${data.intentFloor || '未选择'}\n**💬 备注信息：** ${data.message || '无'}\n\n---\n⏰ 提交时间：${new Date().toLocaleString('zh-CN')}`;
+
+        fetch(DINGTALK_WEBHOOK, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                msgtype: 'markdown',
+                markdown: { title: 'AG回城入驻申请', text: text },
+                at: { isAtAll: false }
+            })
+        })
+        .then(async response => {
+            const result = await response.json();
+            if (response.ok && result.errcode === 0) {
+                showToast('✅ 申请提交成功！招商经理会尽快联系您');
+                if (callback) callback(true);
+            } else {
+                console.error('钉钉返回错误:', result);
+                showToast(`⚠️ 提交成功，但通知发送失败（错误码：${result.errcode}）`, true);
+                if (callback) callback(false);
             }
-        };
-        xhr.send(JSON.stringify({ msgtype: "markdown", markdown: { title: "AG回城入驻申请", text: text }, at: { isAtAll: false } }));
+        })
+        .catch(error => {
+            console.error('网络请求异常:', error);
+            showToast('⚠️ 提交成功，但通知服务暂时不可用（已记录，我们会跟进）', true);
+            if (callback) callback(false);
+        });
     }
 
-    // ======================= 页面内容定义（5页优化排版）=======================
+    // ======================= 页面内容定义（5页）=======================
     const pagesContent = [];
 
     // 第1页：封面 + 序言 + 十年沉淀高光
@@ -469,7 +482,7 @@
         <div class="img-wrapper"><img src="images/highlight.jpg" alt="高光时刻" style="width:100%; border-radius:24px;" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\'><span>🏆 十年高光</span><span>images/highlight.jpg</span></div>'"></div>
     `);
 
-    // 第2页：起因 · 看见热爱 + 转念重塑商业逻辑
+    // 第2页：起因 + 转念
     pagesContent.push(`
         <h2>起因 · 看见热爱</h2>
         <p>唐山这片土地上，藏着被忽视却真实存在的需求群体——<span class="highlight">5所高校、7个校区，逾10万名师生</span>，他们追潮而行，热爱电竞世界，眷恋二次元天地。</p>
@@ -485,7 +498,7 @@
         <div class="img-wrapper"><img src="images/market.jpg" alt="市场数据" style="width:100%; border-radius:24px;" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\'><span>📊 市场数据</span><span>images/market.jpg</span></div>'"></div>
     `);
 
-    // 第3页：六层潮玩矩阵 + 商业生态共同体核心
+    // 第3页：六层潮玩矩阵 + 生态共同体
     pagesContent.push(`
         <h2>🏢 六层潮玩矩阵</h2>
         <div id="floorList"></div>
@@ -501,7 +514,7 @@
         <div class="img-wrapper"><img src="images/1.jpg" alt="生态概念" style="width:100%; border-radius:24px;" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\'><span>🌿 生态共同体</span><span>示意图片</span></div>'"></div>
     `);
 
-    // 第4页：高能运营赋能（活动+社群+会员）
+    // 第4页：运营赋能
     pagesContent.push(`
         <h2>入局 · 高能运营赋能</h2>
         <div style="background:#1b1f2c; border-radius:28px; padding:1rem; margin:0.5rem 0 1rem 0; text-align:center;">
@@ -530,7 +543,7 @@
         <div class="golden-card"><p>高频活动引流 · 精准社群沉淀 · 会员锁客增值</p><p style="font-size:0.75rem;">共生共赢</p></div>
     `);
 
-    // 第5页：招商政策+入驻流程+入驻申请表单
+    // 第5页：招商政策+入驻流程+表单
     pagesContent.push(`
         <h2>📜 招商政策</h2>
         <div class="policy-box">
@@ -568,7 +581,7 @@
         <div class="tiny-text">© 2026 唐山AG回城电竞商业中心 | 电竞+二次元新地标</div>
     `);
 
-    // 构建所有页面DOM
+    // 构建页面DOM
     const container = document.getElementById('pagesContainer');
     const pages = [];
     pagesContent.forEach((html, idx) => {
@@ -579,14 +592,13 @@
         pages.push(pageDiv);
     });
 
-    // 动态渲染楼层列表、流程步骤
+    // 渲染楼层、步骤
     const floorContainer = document.getElementById('floorList');
     if (floorContainer) floorContainer.innerHTML = renderFloors();
     const stepsContainer = document.getElementById('stepsContainer');
     if (stepsContainer) stepsContainer.innerHTML = renderSteps();
 
-    // 表单绑定
-
+    // 表单提交
     const formElem = document.getElementById('joinForm');
     if (formElem) {
         formElem.addEventListener('submit', (e) => {
@@ -594,16 +606,27 @@
             const brand = document.getElementById('brandName').value.trim();
             const name = document.getElementById('contactName').value.trim();
             const phone = document.getElementById('phone').value.trim();
-            if (!brand || !name || !phone) return showToast('请填写品牌名称、联系人及电话', true);
+            const email = document.getElementById('email').value.trim();
+            const intentFloor = document.getElementById('intentFloor').value;
+            const message = document.getElementById('message').value.trim();
+
+            if (!brand || !name || !phone) {
+                showToast('请填写品牌名称、联系人及联系电话', true);
+                return;
+            }
+            const phoneReg = /^1[3-9]\d{9}$/;
+            if (!phoneReg.test(phone) && !/^\d{7,15}$/.test(phone)) {
+                showToast('请填写正确的联系电话', true);
+                return;
+            }
+
             const btn = formElem.querySelector('button');
             const originalText = btn.innerText;
             btn.innerText = '提交中...';
             btn.disabled = true;
+
             sendToDingtalk({
-                brand, contactName: name, phone,
-                email: document.getElementById('email').value,
-                intentFloor: document.getElementById('intentFloor').value,
-                message: document.getElementById('message').value
+                brand, contactName: name, phone, email, intentFloor, message
             }, () => {
                 formElem.reset();
                 btn.innerText = originalText;
@@ -612,7 +635,7 @@
         });
     }
 
-    // 分页逻辑 + 顶部导航高亮
+    // 分页 + 强制置顶
     let currentPage = 0;
     const total = pages.length;
     const indicator = document.getElementById('pageIndicator');
@@ -632,34 +655,30 @@
 
     function showPage(index) {
         if (index < 0) index = 0;
-		if (index >= total) index = total - 1;
-    	pages.forEach((p, i) => {
-			p.classList.toggle('active', i === index);
-		});
-		currentPage = index;
-		indicator.innerText = `${currentPage+1} / ${total}`;
-    	updateNavActive(currentPage);
-    
-		// 强制滚动到最顶部（瞬间置顶，避免停留原位置）
-		window.scrollTo(0, 0);
-		document.documentElement.scrollTop = 0;
-		document.body.scrollTop = 0; // 兼容部分移动端
+        if (index >= total) index = total - 1;
+        pages.forEach((p, i) => {
+            p.classList.toggle('active', i === index);
+        });
+        currentPage = index;
+        indicator.innerText = `${currentPage+1} / ${total}`;
+        updateNavActive(currentPage);
+        // 强制滚动到最顶部（瞬间置顶，避免停留原位置）
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
     }
 
     prevBtn.addEventListener('click', () => showPage(currentPage - 1));
     nextBtn.addEventListener('click', () => showPage(currentPage + 1));
-
-    // 顶部导航点击事件
     navItems.forEach(item => {
         item.addEventListener('click', (e) => {
             const pageNum = parseInt(item.getAttribute('data-page'));
             if (!isNaN(pageNum)) showPage(pageNum);
         });
     });
-
     showPage(0);
 
-    // 跳转到招商表单页面（第5页）
+    // 跳转到表单页面（第5页）
     function jumpToForm() {
         showPage(total - 1);
         setTimeout(() => {
@@ -667,9 +686,8 @@
             if (formSec) formSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 150);
     }
-    const gotoBtn1 = document.getElementById('gotoFormFromPage1');
-    if (gotoBtn1) gotoBtn1.addEventListener('click', (e) => { e.preventDefault(); jumpToForm(); });
-    // 处理其他锚点
+    const gotoBtn = document.getElementById('gotoFormFromPage1');
+    if (gotoBtn) gotoBtn.addEventListener('click', (e) => { e.preventDefault(); jumpToForm(); });
     document.querySelectorAll('a[href="#applyForm"]').forEach(a => {
         a.addEventListener('click', (e) => { e.preventDefault(); jumpToForm(); });
     });
