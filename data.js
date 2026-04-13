@@ -11,7 +11,7 @@ const floors = [
 
 // 页面内容
 const pagesContent = [
-    // 页0：封面 + 序言
+    // 页0：封面 + 序言（保持不变）
     `<div style="text-align:center; margin-bottom:1rem;">
         <div class="hero-badge">⚡ 引领青年文化潮流 · 重塑城市商业未来</div>
         <h1 style="font-size:2rem; font-weight:800; background:linear-gradient(135deg,#fff,#f5a65b,#ff7a2f); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">唐山AG回城电竞商业中心</h1>
@@ -33,7 +33,7 @@ const pagesContent = [
     <p>AG回城以“电竞+二次元”为核心定位，精准卡位当前增长最快的消费赛道，符合从“功能消费”向“情绪消费”转型的市场趋势。这是一场关于中国未来商业的一次勇敢探索，更是未来唐山商业的样板，以电竞、二次元、动漫为核、潮流为翼、商业为基，融合多元业态与情感价值，打造全新的青年消费与社交生态，也必将成为城市商业发展的全新路径。</p>
     <div class="golden-card"><p style="font-weight:bold; font-size:1.2rem;">AG于此，即见未来。</p><p>电竞动漫为核 · 潮流为翼 · 商业为基</p></div>`,
 
-    // 页1：起因 + 转念
+    // 页1：起因 + 转念（保持不变）
     `<h2>起因 · 看见热爱</h2>
     <p>唐山这片土地上，藏着一群被忽视却真实存在的需求群体——<span class="highlight">5所高校、7个校区，逾10万名师生</span>，他们追潮而行，热爱电竞世界，眷恋二次元天地。或许他们的消费能力尚在成长，但那份对同好相聚、兴趣落地的需求，纯粹而迫切。</p>
     <p>他们渴望一处专属空间：能见证电竞赛事的热血沸腾，能寻觅心仪的二次元周边，能定格COSplay的灵动瞬间，更能与志同道合者围坐畅谈，安放心底的热爱。只是放眼周边，远洋城、万达、爱琴海等主流商场，皆以家庭客群、商务人士为核心服务对象，聚焦于高消费层级，却未曾为这群有热爱、有需求的年轻人，预留一方天地。</p>
@@ -54,7 +54,7 @@ const pagesContent = [
     <div class="golden-card"><p>不是商业运营团队，而是商业服务团队</p><p style="font-size:0.8rem;">与商户共成长 · 同破局 · 创未来</p></div>
     <div class="tiny-text">*以上数据来源于2025年中国电竞产业发展报告及二次元产业研究</div>`,
 
-    // 页2：六层潮玩矩阵 + 生态共同体（整体动线改为轮播）
+    // 页2：六层潮玩矩阵 + 生态共同体（整体动线改为轮播，保持不变）
     `<h2>🏢 六层潮玩矩阵</h2>
     <div id="floorList"></div>
     <div class="quote-block"><strong>✨ 生态共同体 · 客流互哺</strong><br>电竞装备+茶饮、谷子店+咖啡厅、密室+音乐餐吧动线贯通，实现商户共生、客流共享。</div>
@@ -72,7 +72,7 @@ const pagesContent = [
     <div class="img-wrapper"><img src="images/4.jpg" alt="密室餐吧" style="width:100%; border-radius:24px;" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\' style=\'background:#10131f; padding:1rem; text-align:center;\'>🔐🎵 密室+音乐餐吧</div>'"></div>
     <div class="golden-card"><p>共生 · 共享 · 共创</p><p style="font-size:0.8rem;">设计商业氛围 · 运营未来价值</p></div>`,
 
-    // 页3：运营赋能（活动集锦改为轮播）
+    // 页3：运营赋能（活动集锦改为轮播，保持不变）
     `<h2>入局 · 高能运营赋能</h2>
     <div style="background:#1b1f2c; border-radius:28px; padding:1rem; margin:0.5rem 0 1rem 0; text-align:center;">🎯 <span class="highlight">“高频活动聚客、精准社群留客、完善会员锁客”</span></div>
     <p>在<span class="highlight">“酒香也怕巷子深”</span>的时代，AG回城运营团队核心的运营优势与招商底气在于以<span class="highlight">“高频活动聚客、精准社群留客、完善会员锁客”</span>为核心运营逻辑，构建全场景、高粘性的消费生态，为入驻商户持续输送精准客流、提升经营转化。</p>
@@ -103,7 +103,7 @@ const pagesContent = [
     <div class="img-wrapper"><img src="images/community2.jpg" alt="社群活动" style="width:100%; border-radius:24px;" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\' style=\'background:#10131f; padding:1rem; text-align:center;\'>💬 社群活动2</div>'"></div>
     <div class="img-wrapper"><img src="images/community3.jpg" alt="社群活动" style="width:100%; border-radius:24px;" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\' style=\'background:#10131f; padding:1rem; text-align:center;\'>💬 社群活动3</div>'"></div>`,
 
-    // 页4：招商政策 + 入驻流程 + 表单 + 区位图（单张）
+    // 页4：招商政策 + 入驻流程 + 表单 + 区位图（移至最后）
     `<h2>📜 招商政策</h2>
     <div class="policy-box">
         <div><strong>🎯 业态共生互补</strong><br>优先引入电竞/二次元/潮玩品牌</div>
@@ -115,10 +115,6 @@ const pagesContent = [
     <h2>📌 入驻流程</h2>
     <div id="stepsContainer"></div>
     <div class="img-wrapper"><img src="images/sign.jpg" alt="签约场景" style="width:100%; border-radius:24px;" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\' style=\'background:#10131f; padding:1rem; text-align:center;\'>🤝 签约场景<br>images/sign.jpg</div>'"></div>
-    
-    <!-- 区位图：单张图片 -->
-    <h2>📍 项目区位</h2>
-    <div class="img-wrapper"><img src="images/location.jpg" alt="项目区位图" style="width:100%; border-radius:24px;" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\' style=\'background:#10131f; padding:1rem; text-align:center;\'>🗺️ 区位图<br>请上传 images/location.jpg</div>'"></div>
     
     <h2>📝 入驻申请</h2>
     <div class="form-card">
@@ -136,6 +132,11 @@ const pagesContent = [
             <button type="submit">🚀 立即提交申请</button>
         </form>
     </div>
+    
+    <!-- 区位图：移至表单之后 -->
+    <h2>📍 项目区位</h2>
+    <div class="img-wrapper"><img src="images/location.jpg" alt="项目区位图" style="width:100%; border-radius:24px;" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\' style=\'background:#10131f; padding:1rem; text-align:center;\'>🗺️ 区位图<br>请上传 images/location.jpg</div>'"></div>
+    
     <div style="text-align:center; margin-top:1rem;">
         <p><strong>招商合作咨询</strong><br>项目招商部</p>
         <p>☎️ 0315-5379888 | 📧 dg2100@163.com</p>
