@@ -50,7 +50,6 @@ function sendToDingtalk(data, callback) {
     })
     .then(res => res.json())
     .then(result => {
-        console.log('代理返回:', result);
         if (result.errcode === 0) {
             showToast('✅ 提交成功！招商经理会尽快联系您');
             callback(true);
@@ -139,6 +138,8 @@ function showPage(index) {
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
+    // 切换页面后重新初始化轮播（确保当前页面的轮播生效）
+    setTimeout(() => initCarousels(), 50);
 }
 
 prev.addEventListener('click', () => showPage(current-1));
@@ -154,3 +155,85 @@ function jumpForm() {
 }
 const gotoBtn = document.getElementById('gotoFormFromPage1');
 if (gotoBtn) gotoBtn.addEventListener('click', (e) => { e.preventDefault(); jumpForm(); });
+
+// ========== 轮播图组件 ==========
+function initCarousels() {
+    const carousels = document.querySelectorAll('.carousel');
+    carousels.forEach((carousel) => {
+        // 避免重复初始化
+        if (carousel.hasAttribute('data-initialized')) return;
+        carousel.setAttribute('data-initialized', 'true');
+        
+        const imagesAttr = carousel.getAttribute('data-images');
+        if (!imagesAttr) return;
+        let images = [];
+        try {
+            images = JSON.parse(imagesAttr);
+        } catch(e) {
+            console.warn('轮播图 data-images 格式错误', e);
+            return;
+        }
+        if (!images.length) return;
+
+        carousel.innerHTML = `
+            <div class="carousel-container" style="position:relative; overflow:hidden; border-radius:24px;">
+                <div class="carousel-wrapper" style="display:flex; transition:transform 0.4s ease;">
+                    ${images.map(src => `<div class="carousel-slide" style="flex:0 0 100%;"><img src="${src}" style="width:100%; display:block;" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22100%25%22%20height%3D%22200%22%20viewBox%3D%220%200%20100%20200%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%2310131f%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22%238f9bb5%22%3E图片加载失败%3C%2Ftext%3E%3C%2Fsvg%3E';"></div>`).join('')}
+                </div>
+                <button class="carousel-prev" style="position:absolute; left:8px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.5); color:white; border:none; border-radius:50%; width:36px; height:36px; cursor:pointer; z-index:2; backdrop-filter:blur(4px);">◀</button>
+                <button class="carousel-next" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.5); color:white; border:none; border-radius:50%; width:36px; height:36px; cursor:pointer; z-index:2; backdrop-filter:blur(4px);">▶</button>
+                <div class="carousel-dots" style="position:absolute; bottom:12px; left:0; right:0; display:flex; justify-content:center; gap:8px; z-index:2;"></div>
+            </div>
+        `;
+        
+        const wrapper = carousel.querySelector('.carousel-wrapper');
+        const slides = carousel.querySelectorAll('.carousel-slide');
+        const prevBtn = carousel.querySelector('.carousel-prev');
+        const nextBtn = carousel.querySelector('.carousel-next');
+        const dotsContainer = carousel.querySelector('.carousel-dots');
+        let currentIndex = 0;
+        const totalSlides = slides.length;
+
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.style.width = '8px';
+            dot.style.height = '8px';
+            dot.style.borderRadius = '50%';
+            dot.style.background = i === 0 ? '#f15a24' : 'rgba(255,255,255,0.5)';
+            dot.style.cursor = 'pointer';
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsContainer.appendChild(dot);
+        }
+        const dots = dotsContainer.children;
+
+        function updateDots() {
+            for (let i = 0; i < totalSlides; i++) {
+                dots[i].style.background = i === currentIndex ? '#f15a24' : 'rgba(255,255,255,0.5)';
+            }
+        }
+
+        function goToSlide(index) {
+            if (index < 0) index = totalSlides - 1;
+            if (index >= totalSlides) index = 0;
+            currentIndex = index;
+            wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+            updateDots();
+        }
+
+        prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1));
+        nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1));
+
+        let autoInterval = setInterval(() => {
+            goToSlide(currentIndex + 1);
+        }, 5000);
+        carousel.addEventListener('mouseenter', () => clearInterval(autoInterval));
+        carousel.addEventListener('mouseleave', () => {
+            autoInterval = setInterval(() => goToSlide(currentIndex + 1), 5000);
+        });
+    });
+}
+
+// 首次加载初始化轮播
+document.addEventListener('DOMContentLoaded', () => {
+    initCarousels();
+});

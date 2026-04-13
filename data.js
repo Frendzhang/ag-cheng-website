@@ -9,7 +9,7 @@ const floors = [
     { level: "6F", name: "云中见影", desc: "宠物主题空间。给毛孩子一个地方，也给宠物主一个社交场。同时也给每一个喜欢亲近自然与小动物的家庭提供一个自在的空间。通过不同主题场景的规划设计，让萌宠亲密接触与自然科学普及相结合，形成独属于每个家庭的自然课堂。", brands: ["多家品牌洽谈中"], extra: "*欢迎宠物用品/服务类品牌入驻" }
 ];
 
-// 页面内容（完整保留所有文本）
+// 页面内容
 const pagesContent = [
     // 页0：封面 + 序言
     `<div style="text-align:center; margin-bottom:1rem;">
@@ -54,11 +54,11 @@ const pagesContent = [
     <div class="golden-card"><p>不是商业运营团队，而是商业服务团队</p><p style="font-size:0.8rem;">与商户共成长 · 同破局 · 创未来</p></div>
     <div class="tiny-text">*以上数据来源于2025年中国电竞产业发展报告及二次元产业研究</div>`,
 
-    // 页2：六层潮玩矩阵 + 生态共同体
+    // 页2：六层潮玩矩阵 + 生态共同体（整体动线改为轮播）
     `<h2>🏢 六层潮玩矩阵</h2>
     <div id="floorList"></div>
     <div class="quote-block"><strong>✨ 生态共同体 · 客流互哺</strong><br>电竞装备+茶饮、谷子店+咖啡厅、密室+音乐餐吧动线贯通，实现商户共生、客流共享。</div>
-    <div class="img-wrapper"><img src="images/atmosphere.jpg" alt="整体动线" style="width:100%; border-radius:24px;" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\' style=\'background:#10131f; padding:1rem; text-align:center;\'>🔄 整体动线<br>images/atmosphere.jpg</div>'"></div>
+    <div class="carousel" data-images='["images/atmosphere1.jpg","images/atmosphere2.jpg","images/atmosphere3.jpg"]'></div>
     <h2 style="margin-top:1.2rem;">沉淀 · 商业生态共同体</h2>
     <p>我们注重的不仅是业态布局和商户的专属区域，而是通过运营和活动，让这些商户有效联动，形成良好可持续性的商业氛围。</p>
     <p>在 AG 回城，每一位入驻商户皆非独立经营的个体，而是深度共生的商业生态共同体。我们摒弃传统商业 <span class="highlight">“简单排布、零散入驻”</span> 的粗放模式，坚持以<span class="highlight">业态共生、客流互哺、场景联动</span>为核心规划逻辑，让商户彼此依托、有机共生，形成可持续的商业生长力。</p>
@@ -72,7 +72,7 @@ const pagesContent = [
     <div class="img-wrapper"><img src="images/4.jpg" alt="密室餐吧" style="width:100%; border-radius:24px;" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\' style=\'background:#10131f; padding:1rem; text-align:center;\'>🔐🎵 密室+音乐餐吧</div>'"></div>
     <div class="golden-card"><p>共生 · 共享 · 共创</p><p style="font-size:0.8rem;">设计商业氛围 · 运营未来价值</p></div>`,
 
-    // 页3：运营赋能（完整保留活动、社群、会员内容）
+    // 页3：运营赋能（活动集锦改为轮播）
     `<h2>入局 · 高能运营赋能</h2>
     <div style="background:#1b1f2c; border-radius:28px; padding:1rem; margin:0.5rem 0 1rem 0; text-align:center;">🎯 <span class="highlight">“高频活动聚客、精准社群留客、完善会员锁客”</span></div>
     <p>在<span class="highlight">“酒香也怕巷子深”</span>的时代，AG回城运营团队核心的运营优势与招商底气在于以<span class="highlight">“高频活动聚客、精准社群留客、完善会员锁客”</span>为核心运营逻辑，构建全场景、高粘性的消费生态，为入驻商户持续输送精准客流、提升经营转化。</p>
@@ -85,7 +85,7 @@ const pagesContent = [
         <div class="activity-card"><strong>🔥 潮流类</strong><br>潮玩艺术展、IP快闪店、电音狂欢节、主题市集</div>
         <div class="activity-card"><strong>👨‍👩‍👧 亲子类</strong><br>儿童才艺大赛、亲子嘉年华、家庭互动体验</div>
     </div>
-    <div class="img-wrapper"><img src="images/6.jpg" alt="活动集锦" style="width:100%; border-radius:24px;" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\' style=\'background:#10131f; padding:1rem; text-align:center;\'>🎪🎤 活动集锦</div>'"></div>
+    <div class="carousel" data-images='["images/activity1.jpg","images/activity2.jpg","images/activity3.jpg","images/activity4.jpg"]'></div>
     <h3>💬 精准社群运营 · 强化客群粘性</h3>
     <p>基于活动沉淀，我们搭建了几十个精准兴趣社群，涵盖<span class="highlight">电竞粉丝群、二次元同好群、潮玩玩家群、亲子成长群</span>四大核心类别，实现客群精准分层运营。</p>
     <div class="info-card" style="background:rgba(17,21,31,0.7); border-radius:28px; padding:1rem; margin:1rem 0;"><p><span class="highlight">运营核心：“以兴趣为纽带，实现客群沉淀与精准的情绪触达”</span></p><p style="margin-top:0.5rem;">通过社群日常互动、活动预告、专属福利、同好交流，强化客群对项目的认同感与归属感；同时，社群作为商户与客群的沟通桥梁，可助力入驻商户快速触达目标客群，同时联动不同品类的商户产生裂变效应，发布新品、活动信息，提升营销效率，降低获客成本。</p></div>
@@ -103,7 +103,7 @@ const pagesContent = [
     <div class="img-wrapper"><img src="images/community2.jpg" alt="社群活动" style="width:100%; border-radius:24px;" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\' style=\'background:#10131f; padding:1rem; text-align:center;\'>💬 社群活动2</div>'"></div>
     <div class="img-wrapper"><img src="images/community3.jpg" alt="社群活动" style="width:100%; border-radius:24px;" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\' style=\'background:#10131f; padding:1rem; text-align:center;\'>💬 社群活动3</div>'"></div>`,
 
-    // 页4：招商政策 + 入驻流程 + 表单
+    // 页4：招商政策 + 入驻流程 + 表单 + 区位图（单张）
     `<h2>📜 招商政策</h2>
     <div class="policy-box">
         <div><strong>🎯 业态共生互补</strong><br>优先引入电竞/二次元/潮玩品牌</div>
@@ -115,6 +115,11 @@ const pagesContent = [
     <h2>📌 入驻流程</h2>
     <div id="stepsContainer"></div>
     <div class="img-wrapper"><img src="images/sign.jpg" alt="签约场景" style="width:100%; border-radius:24px;" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\' style=\'background:#10131f; padding:1rem; text-align:center;\'>🤝 签约场景<br>images/sign.jpg</div>'"></div>
+    
+    <!-- 区位图：单张图片 -->
+    <h2>📍 项目区位</h2>
+    <div class="img-wrapper"><img src="images/location.jpg" alt="项目区位图" style="width:100%; border-radius:24px;" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\' style=\'background:#10131f; padding:1rem; text-align:center;\'>🗺️ 区位图<br>请上传 images/location.jpg</div>'"></div>
+    
     <h2>📝 入驻申请</h2>
     <div class="form-card">
         <form id="joinForm">

@@ -170,7 +170,7 @@ h3 {
     margin: 1.5rem 0;
 }
 
-/* 统计卡片 - 修复串行 */
+/* 统计卡片 */
 .stats-row {
     display: flex;
     flex-wrap: wrap;
@@ -202,7 +202,7 @@ h3 {
     word-break: keep-all;
 }
 
-/* 入驻流程 - 修复串行 */
+/* 入驻流程 */
 .process-steps {
     display: flex;
     flex-wrap: wrap;
@@ -355,6 +355,52 @@ button {
 .highlight {
     color: #f5a65b;
     font-weight: 700;
+}
+
+/* 轮播图样式 */
+.carousel {
+    margin: 1.2rem 0;
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.carousel-container {
+    position: relative;
+    background: #0f121d;
+    border-radius: 24px;
+}
+
+.carousel-wrapper {
+    display: flex;
+    transition: transform 0.4s ease;
+}
+
+.carousel-slide {
+    flex: 0 0 100%;
+}
+
+.carousel-prev,
+.carousel-next {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(241, 90, 36, 0.5);
+    color: #f5a65b;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.carousel-prev:hover,
+.carousel-next:hover {
+    background: #f15a24;
+    color: white;
+}
+
+.carousel-dots div {
+    transition: 0.2s;
+}
+
+.carousel-dots div:hover {
+    transform: scale(1.2);
 }
 
 @media (max-width: 500px) {
