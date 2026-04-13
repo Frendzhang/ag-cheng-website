@@ -228,7 +228,7 @@ function initCarousels() {
         }, 5000);
         carousel.addEventListener('mouseenter', () => clearInterval(autoInterval));
         carousel.addEventListener('mouseleave', () => {
-            autoInterval = setInterval(() => goToSlide(currentIndex + 1), 5000);
+            autoInterval = setInterval(() => goToSlide(currentIndex + 1), 3000);
         });
     });
 }
